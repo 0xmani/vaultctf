@@ -13,12 +13,15 @@ from datetime import datetime
 msg = 'Invalid Username or Password.'
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "S3cr3t"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
-app.config["SESSION_COOKIE_SECURE"] = True	
-Session(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
+#app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "sqlalchemy"
+#app.config["SESSION_COOKIE_SECURE"] = True
+db = SQLAlchemy(app)	
+app.config['SESSION_SQLALCHEMY'] = db
 
+sess = Session(app)
+#db.create_all()
 #database
 db = SQLAlchemy(app)
 class Users(db.Model):
@@ -99,4 +102,4 @@ def logout():
 
 
 if __name__  == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)
